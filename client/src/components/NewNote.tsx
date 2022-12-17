@@ -1,4 +1,4 @@
-import { NoteData, Tag } from "../types/Notes"
+import { NoteData, Tag } from "../types/Note"
 import { NoteForm } from "./NoteForm"
 
 type NewNoteProps = {

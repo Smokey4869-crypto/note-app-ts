@@ -1,7 +1,7 @@
 import { Row, Col, Stack, Button, Form, Card, Badge } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import ReactSelect from 'react-select'
-import { Note, Tag } from '../types/Notes'
+import { Note, Tag } from '../types/Note'
 import { useMemo, useState } from 'react'
 import styles from '../styles/NoteCard.module.css'
 
