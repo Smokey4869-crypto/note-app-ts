@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid"
 import { NoteList } from "./components/NoteList"
 import { NoteLayout } from "./components/NoteLayout"
 import { Note } from "./components/Note"
+import { EditNote } from "./components/EditNote"
 
 function App() {
   const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTE", [])
@@ -26,6 +27,20 @@ function App() {
     })
   }
 
+  function onUpdateNote(id: string,  { tags, ...data} : NoteData) {
+    setNotes(prevNotes => {
+      return prevNotes.map(note => {
+        if (note.id === id) {
+          return {
+            ...note, ...data, tagIds: tags.map(tag => tag.id)
+          }
+        } else {
+          return note
+        }
+      })
+    })
+  }
+
   function addTag(tag: Tag) {
     setTags(prev => [...prev, tag])
   }
@@ -35,14 +50,19 @@ function App() {
       <Routes>
         <Route path="/" element={<NoteList availableTags={tags} notes={notesWithTags} />} />
         <Route path="/new" element={
-          <NewNote 
-            onSubmit={onCreateNote} 
-            onAddTag={addTag} 
+          <NewNote
+            onSubmit={onCreateNote}
+            onAddTag={addTag}
             availableTags={tags}
           />} />
-        <Route path="/:id" element={<NoteLayout notes={notesWithTags}/>}>
-          <Route index element={<Note/>}></Route>
-          <Route path="edit" element={<h1>Edit</h1>}></Route>
+        <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
+          <Route index element={<Note />}/>
+          <Route path="edit" element={
+            <EditNote 
+              onSubmit={onUpdateNote}
+              onAddTag={addTag}
+              availableTags={tags} />
+          }/>
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
